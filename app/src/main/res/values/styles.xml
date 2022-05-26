@@ -13,11 +13,11 @@
 
     <style name="AppInputFieldStyle"
           parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/input_field</item>
+        <item name="android:background">@drawable/inputfield_round</item>
     </style>
 
     <style name="AppButtonStyle"
            parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button</item>
+        <item name="android:background">@drawable/button_round</item>
     </style>
 </resources>
