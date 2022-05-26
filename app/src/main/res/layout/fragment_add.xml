@@ -21,8 +21,6 @@
             android:paddingHorizontal="10dp"
     >
 
-
-
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="Create"
@@ -67,16 +65,18 @@
                   android:textColor="@color/black"
                   android:padding="15dp"
                   android:layout_marginBottom="15dp"
+                  android:id="@+id/titleInput"
         />
 
         <EditText android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:hint="Description"
-                  android:inputType="text"
+                  android:inputType="textMultiLine"
                   android:textColorHint="#666"
                   android:textColor="@color/black"
                   android:padding="15dp"
                   android:layout_marginBottom="15dp"
+                  android:id="@+id/descInput"
         />
 
         <EditText android:layout_width="match_parent"
@@ -88,6 +88,8 @@
                   android:padding="15dp"
                   android:clickable="false"
                   android:focusable="false"
+                  android:onClick="showDatePicker"
+                  android:id="@+id/dateInput"
         />
     </LinearLayout>
 
@@ -102,9 +104,14 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#d4d4d4"
                 android:text="Clear"
+                android:clickable="false"
+                android:focusable="false"
+                android:alpha="0"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                android:padding="15dp"/>
+                android:padding="15dp"
+                android:id="@+id/clearButton"
+                android:onClick="clearButtonAction"/>
 
 
         <androidx.legacy.widget.Space
@@ -120,7 +127,8 @@
                 android:textColor="@color/white"
                 android:textFontWeight="600"
                 android:textSize="15sp"
-                android:padding="15dp"/>
+                android:padding="15dp"
+                android:id="@+id/submitButton"/>
 
     </LinearLayout>
 
