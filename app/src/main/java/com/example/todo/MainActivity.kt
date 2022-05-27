@@ -11,85 +11,78 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.json.JSONArray
+import org.json.JSONObject
 import java.text.DateFormat
+import java.text.ParsePosition
 import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity() {
-    private var dialog: BottomSheetDialog? = null;
+    private lateinit var dialog: BottomSheetDialog
+    private lateinit var toast: TextView
+    private lateinit var titleField: EditText
+    private lateinit var descField: EditText
+    private lateinit var dateField: EditText
+    private lateinit var clearButton: Button
 
-    private var titleField: EditText? = null;
-    private var descField: EditText? = null;
-    private var dateField: EditText? = null;
+    private lateinit var todosListView: ListView
 
-    private var clearButton: Button? = null;
-    private var currentDate: Calendar = Calendar.getInstance();
-
-    private var toast: TextView? = null;
-
-    private var todosListView: ListView? = null;
-
-    private val ANIMATION_DURATION: Long = 300;
-
-    private val todosList: MutableList<String> = mutableListOf();
+    private var currentDate: Calendar = Calendar.getInstance()
+    private val ANIMATION_DURATION: Long = 300
+    private val todosList: ArrayList<TodoModel> = ArrayList<TodoModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        displayTodos();
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        displayTodos()
     }
 
     private fun displayTodos(){
-        todosListView = findViewById(R.id.todo_listView);
-        val todos: JSONArray = Todo().getAll(this);
+        todosListView = findViewById(R.id.todo_listView)
+        val todos: JSONArray = DB().getAll(this)
 
         for (i in 0 until todos.length()){
-            val title: String = todos.getJSONObject(i).get("title").toString();
-            todosList.add(title);
+            val obj: JSONObject = todos.getJSONObject(i)
+            val id: Long = obj.getLong("id")
+            val title: String = obj.getString("title")
+            val desc: String = obj.getString("desc")
+            val date: String = obj.getString("date")
+            todosList.add(TodoModel(id, title, desc, date, TodoModel().STATUS_PENDING))
         }
 
-        val adapter: ArrayAdapter<String> = ArrayAdapter(
-            this,
-            R.layout.support_simple_spinner_dropdown_item,
-            todosList);
-
-        todosListView?.adapter = adapter;
+        todosListView.adapter = TodoAdapter(this, R.layout.todo_card, todosList)
     }
 
-    private fun updateTodos(title: String){
-        todosList.add(title);
-
-        todosListView?.adapter = ArrayAdapter(
-            this,
-            R.layout.support_simple_spinner_dropdown_item,
-            todosList);
+    private fun updateTodos(id:Long, title: String, desc: String, date: String) {
+        todosList.add(TodoModel(id, title, desc, date, TodoModel().STATUS_PENDING))
+        todosListView.adapter = TodoAdapter(this, R.layout.todo_card, todosList)
     }
 
     private fun setListeners (){
-        titleField?.addTextChangedListener { setClearButtonVisibility() }
-        descField?.addTextChangedListener { setClearButtonVisibility() }
-        dateField?.addTextChangedListener { setClearButtonVisibility() }
+        titleField.addTextChangedListener { setClearButtonVisibility() }
+        descField.addTextChangedListener { setClearButtonVisibility() }
+        dateField.addTextChangedListener { setClearButtonVisibility() }
     }
 
     fun addButtonAction(view: View) {
         dialog = BottomSheetDialog(view.context)
-        dialog?.setContentView(layoutInflater.inflate(R.layout.add_dialog, null))
-        dialog?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED;
-        dialog?.show()
+        dialog.setContentView(layoutInflater.inflate(R.layout.add_dialog, null))
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.show()
 
 
 
-        titleField = dialog?.findViewById(R.id.titleInput);
-        descField = dialog?.findViewById(R.id.descInput);
-        dateField = dialog?.findViewById(R.id.dateInput);
-        clearButton = dialog?.findViewById(R.id.clearButton);
-        toast = dialog?.findViewById(R.id.toast_add_dialog);
+        titleField = dialog.findViewById(R.id.titleInput)!!
+        descField = dialog.findViewById(R.id.descInput)!!
+        dateField = dialog.findViewById(R.id.dateInput)!!
+        clearButton = dialog.findViewById(R.id.clearButton)!!
+        toast = dialog.findViewById(R.id.toast_add_dialog)!!
 
-        setListeners();
+        setListeners()
     }
 
     fun hideDialog(view: View) {
-        dialog?.hide()
+        dialog.hide()
     }
 
     fun showDatePicker(view: View){
@@ -99,66 +92,83 @@ class MainActivity : AppCompatActivity() {
             currentDate.get(Calendar.YEAR),
             currentDate.get(Calendar.MONTH),
             currentDate.get(Calendar.DAY_OF_MONTH)
-        );
-        datePickerDialog.datePicker.minDate = currentDate.timeInMillis;
-        datePickerDialog.show();
+        )
+        datePickerDialog.datePicker.minDate = currentDate.timeInMillis
+        datePickerDialog.show()
     }
 
     private fun setDate(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        val newDate: Calendar = Calendar.getInstance();
-        newDate.set(year, monthOfYear, dayOfMonth);
-        dateField?.setText(DateFormat.getDateInstance(DateFormat.LONG).format(newDate.time));
+        val newDate: Calendar = Calendar.getInstance()
+        newDate.set(year, monthOfYear, dayOfMonth)
+        dateField.setText(DateFormat.getDateInstance(DateFormat.LONG).format(newDate.time))
     }
 
 
     private fun setClearButtonVisibility(){
-        hideToast();
+        hideToast()
 
-        if (titleField?.text.toString() == "" && descField?.text.toString() == "" && dateField?.text.toString() == ""){
-            clearButton?.alpha = 0F;
-            clearButton?.isClickable = false;
-            clearButton?.isFocusable = false;
+        if (titleField.text.toString() == "" && descField.text.toString() == "" && dateField.text.toString() == ""){
+            clearButton.alpha = 0F
+            clearButton.isClickable = false
+            clearButton.isFocusable = false
         }else{
-            clearButton?.isClickable = true;
-            clearButton?.isFocusable = true;
-            clearButton?.alpha = 1F;
+            clearButton.isClickable = true
+            clearButton.isFocusable = true
+            clearButton.alpha = 1F
         }
     }
 
     fun clearButtonAction(view: View){
-        titleField?.text?.clear();
-        descField?.text?.clear();
-        dateField?.text?.clear();
+        titleField.text?.clear()
+        descField.text?.clear()
+        dateField.text?.clear()
     }
 
     fun submitButtonAction(view: View){
-        val title: String = titleField!!.text.toString();
-        val desc: String = descField!!.text.toString();
-        val date: String = dateField!!.text.toString();
+        val title: String = titleField.text.toString()
+        val desc: String = descField.text.toString()
+        val date: String = dateField.text.toString()
 
         if (title == ""){
-            showToast("Title is required!");
+            showToast("Title is required!")
         }else if (date == ""){
             showToast("Date is required!")
         }else{
-            if(!Todo().create(title, desc, date, this)){
+            val responseId: Long = DB().create(title, desc, date, this)
+            if(responseId == 0L){
                 showToast("Some error occurred!")
             }else{
-                clearButtonAction(view);
-                updateTodos(title);
-                dialog?.hide();
+                updateTodos(responseId, title, desc, date)
+                dialog.hide()
+                Toast.makeText(this, "ToDo created", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    fun deleteTodo(id: Long){
+        for(i in 0 until todosList.size){
+            todosList.forEach { item ->
+                if (item.id == id){
+                    if (DB().delete(this, id)){
+                        todosList.remove(item)
+                        todosListView.adapter = TodoAdapter(this, R.layout.todo_card, todosList)
+
+                        Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+        Toast.makeText(this, "Some error occurred", Toast.LENGTH_SHORT).show()
+    }
+
     private fun showToast(msg: String){
-        toast?.text = msg;
-        toast?.visibility = View.VISIBLE;
-        toast?.animate()?.scaleY(1F)?.duration = ANIMATION_DURATION;
+        toast.text = msg
+        toast.visibility = View.VISIBLE
+        toast.animate()?.scaleY(1F)?.duration = ANIMATION_DURATION
     }
 
     private fun hideToast(){
-        toast?.animate()?.scaleY(0F)?.duration = ANIMATION_DURATION;
-        Handler(Looper.getMainLooper()).postDelayed({ toast?.visibility = View.GONE }, ANIMATION_DURATION/2);
+        toast.animate()?.scaleY(0F)?.duration = ANIMATION_DURATION
+        Handler(Looper.getMainLooper()).postDelayed({ toast.visibility = View.GONE }, ANIMATION_DURATION/2)
     }
 }

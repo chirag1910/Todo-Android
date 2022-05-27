@@ -9,10 +9,14 @@
         tools:context=".MainActivity">
 
     <ListView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               app:layout_constraintTop_toTopOf="parent"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintEnd_toEndOf="parent"
+              android:padding="20dp"
+              android:divider="@android:color/transparent"
+              android:dividerHeight="15dp"
+              android:scrollbars="none"
               android:id="@+id/todo_listView"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

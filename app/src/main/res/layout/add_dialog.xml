@@ -141,7 +141,7 @@
                 android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#000"
-                android:text="Submit"
+                android:text="Add"
                 android:textColor="@color/white"
                 android:textFontWeight="600"
                 android:textSize="15sp"

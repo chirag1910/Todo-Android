@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/bg_round"
-              android:id="@+id/todo_card"
-              android:backgroundTint="#44ff6666"
-              android:padding="20dp">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Title"
-              android:textSize="20sp"
-              android:textFontWeight="800"
-              android:textColor="#ff0000"/>
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/bg_round"
+                  android:id="@+id/todo_card"
+                  android:backgroundTint="#44ff6666"
+                  android:padding="20dp"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="27 May 2022"
-              android:textColor="#AAff0000"
-              android:textSize="15sp"
-              android:textFontWeight="700"
-              android:layout_marginTop="5dp"/>
 
-    <View android:layout_width="100dp"
-          android:layout_height="0.5dp"
-          android:background="#E91E63"
-          android:layout_marginVertical="13dp"
-          android:layout_gravity="center"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="center"
+                  android:textSize="20sp"
+                  android:textFontWeight="800"
+                  android:textAllCaps="true"
+                  android:textColor="#ff0000"
+                  android:id="@+id/todo_title"/>
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vehicula sem eget scelerisque tristique. Curabitur facilisis vehicula nunc, a facilisis lacus. Nullam placerat pulvinar facilisis. Curabitur urna metus, tempor sed metus sed, vulputate semper risus. Ut quis semper lorem. Ut at est eu dui fermentum maximus"
-              android:textColor="#ff0000"
-              android:textFontWeight="500"/>
-</LinearLayout>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="center"
+                  android:textColor="#AAff0000"
+                  android:textSize="15sp"
+                  android:textFontWeight="700"
+                  android:layout_marginTop="5dp"
+                  android:id="@+id/todo_date"/>
+
+        <View android:layout_width="100dp"
+              android:layout_height="0.5dp"
+              android:background="#ff6666"
+              android:layout_marginVertical="13dp"
+              android:layout_gravity="center"
+              android:id="@+id/todo_sep"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="#ff0000"
+                  android:textFontWeight="500"
+                  android:textAlignment="center"
+                  android:id="@+id/todo_desc"/>
+    </LinearLayout>
+
+    <ImageButton android:layout_width="15dp"
+                 android:layout_height="15dp"
+                 android:src="@drawable/ic_down_arrow"
+                 android:backgroundTint="@android:color/transparent"
+                 android:layout_marginTop="10dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:tint="#444"
+                 android:id="@+id/todo_dropdown_button"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

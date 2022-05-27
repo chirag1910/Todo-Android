@@ -1,20 +1,13 @@
 package com.example.todo
 
-import android.app.Application
 import android.content.Context
-import android.preference.PreferenceManager
-import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.File
-import java.io.FileInputStream
-import java.io.Reader
-import java.util.Date
 
-class Todo{
+class DB{
     private val SP_NAME = "todos.json";
     private val MACROS_FILE = "todo_macros";
     private val ID_KEY = "id";
@@ -49,10 +42,11 @@ class Todo{
         writer.close()
         return true;
     }
-    fun create(title: String, desc: String?, date: String, context: Context): Boolean{
+    fun create(title: String, desc: String?, date: String, context: Context): Long{
         try{
             val todo: JSONObject = JSONObject();
-            todo.put("id", getNextId(context));
+            val nextId: Long = getNextId(context);
+            todo.put("id", nextId);
             todo.put("title", title);
             todo.put("desc", desc);
             todo.put("date", date);
@@ -66,10 +60,14 @@ class Todo{
 
             todos.put(todo);
             incrementId(context);
-            return saveFileContent(context, todos.toString());
+            return if (saveFileContent(context, todos.toString())){
+                nextId;
+            }else{
+                0;
+            }
 
         }catch (error: Error){
-            return false;
+            return 0;
         }
     }
 
@@ -80,6 +78,26 @@ class Todo{
             JSONArray();
         }else{
             JSONArray(todos);
+        }
+    }
+
+    fun delete(context: Context, id: Long): Boolean{
+        val todos: String? = getFileContent(context);
+        if (todos == null){
+            return false;
+        }else{
+            val todos = JSONArray(todos);
+
+            for(i in 0 until todos.length()){
+                if (todos.getJSONObject(i).getLong("id") == id){
+                    todos.remove(i)
+                    if (saveFileContent(context, todos.toString())){
+                        return true
+                    }
+                }
+            }
+
+            return false
         }
     }
 }
