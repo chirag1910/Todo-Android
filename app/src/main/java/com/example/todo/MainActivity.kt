@@ -1,31 +1,21 @@
 package com.example.todo
 
-import android.R.attr.startYear
 import android.app.DatePickerDialog
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import android.view.KeyEvent
+import android.os.Looper
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.TextView
-import androidx.annotation.RequiresApi
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.json.JSONArray
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
-import kotlin.concurrent.timerTask
+import java.util.Calendar
 
 
-public open class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     private var dialog: BottomSheetDialog? = null;
 
     private var titleField: EditText? = null;
@@ -37,11 +27,42 @@ public open class MainActivity : AppCompatActivity() {
 
     private var toast: TextView? = null;
 
+    private var todosListView: ListView? = null;
+
     private val ANIMATION_DURATION: Long = 300;
+
+    private val todosList: MutableList<String> = mutableListOf();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        displayTodos();
+    }
+
+    private fun displayTodos(){
+        todosListView = findViewById(R.id.todo_listView);
+        val todos: JSONArray = Todo().getAll(this);
+
+        for (i in 0 until todos.length()){
+            val title: String = todos.getJSONObject(i).get("title").toString();
+            todosList.add(title);
+        }
+
+        val adapter: ArrayAdapter<String> = ArrayAdapter(
+            this,
+            R.layout.support_simple_spinner_dropdown_item,
+            todosList);
+
+        todosListView?.adapter = adapter;
+    }
+
+    private fun updateTodos(title: String){
+        todosList.add(title);
+
+        todosListView?.adapter = ArrayAdapter(
+            this,
+            R.layout.support_simple_spinner_dropdown_item,
+            todosList);
     }
 
     private fun setListeners (){
@@ -52,7 +73,7 @@ public open class MainActivity : AppCompatActivity() {
 
     fun addButtonAction(view: View) {
         dialog = BottomSheetDialog(view.context)
-        dialog?.setContentView(layoutInflater.inflate(R.layout.fragment_add, null))
+        dialog?.setContentView(layoutInflater.inflate(R.layout.add_dialog, null))
         dialog?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED;
         dialog?.show()
 
@@ -111,15 +132,20 @@ public open class MainActivity : AppCompatActivity() {
     }
 
     fun submitButtonAction(view: View){
-        if (titleField?.text.toString() == ""){
+        val title: String = titleField!!.text.toString();
+        val desc: String = descField!!.text.toString();
+        val date: String = dateField!!.text.toString();
+
+        if (title == ""){
             showToast("Title is required!");
-        }else if (dateField?.text.toString() == ""){
+        }else if (date == ""){
             showToast("Date is required!")
         }else{
-            if(!Todo().create(titleField!!.text.toString(), descField?.text?.toString(), dateField!!.text.toString(), this)){
+            if(!Todo().create(title, desc, date, this)){
                 showToast("Some error occurred!")
             }else{
                 clearButtonAction(view);
+                updateTodos(title);
                 dialog?.hide();
             }
         }
@@ -133,6 +159,6 @@ public open class MainActivity : AppCompatActivity() {
 
     private fun hideToast(){
         toast?.animate()?.scaleY(0F)?.duration = ANIMATION_DURATION;
-        Handler().postDelayed({ toast?.visibility = View.GONE }, ANIMATION_DURATION/2);
+        Handler(Looper.getMainLooper()).postDelayed({ toast?.visibility = View.GONE }, ANIMATION_DURATION/2);
     }
 }

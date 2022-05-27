@@ -61,7 +61,7 @@
               android:textSize="20sp"
               android:textFontWeight="600"
               android:textColor="#FF6666"
-              android:background="@drawable/textview_round"
+              android:background="@drawable/bg_error_toast"
               android:backgroundTint="#4dff6666"
               android:id="@+id/toast_add_dialog"/>
 
@@ -78,6 +78,7 @@
                   android:inputType="text"
                   android:textColorHint="#666"
                   android:textColor="@color/black"
+                  android:backgroundTint="#e4e4e4"
                   android:padding="15dp"
                   android:layout_marginBottom="15dp"
                   android:id="@+id/titleInput"
@@ -89,6 +90,7 @@
                   android:inputType="textMultiLine"
                   android:textColorHint="#666"
                   android:textColor="@color/black"
+                  android:backgroundTint="#e4e4e4"
                   android:padding="15dp"
                   android:layout_marginBottom="15dp"
                   android:id="@+id/descInput"
@@ -100,6 +102,7 @@
                   android:inputType="date"
                   android:textColorHint="#666"
                   android:textColor="@color/black"
+                  android:backgroundTint="#e4e4e4"
                   android:padding="15dp"
                   android:clickable="false"
                   android:focusable="false"
