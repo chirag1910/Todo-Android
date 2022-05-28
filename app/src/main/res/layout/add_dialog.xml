@@ -31,7 +31,8 @@
                   app:layout_constraintBottom_toBottomOf="parent"
                   android:fontWeight="700"
                   android:textColor="@color/black"
-                  android:textSize="28sp"/>
+                  android:textSize="28sp"
+                  android:id="@+id/dialog_heading"/>
 
         <ImageButton android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
@@ -39,9 +40,8 @@
                      app:layout_constraintTop_toTopOf="parent"
                      app:layout_constraintBottom_toBottomOf="parent"
                      android:src="@drawable/ic_close"
-                     android:onClick="hideDialog"
                      android:backgroundTint="@color/white"
-                     android:id="@+id/whatever"/>
+                     android:id="@+id/hideButtonBottomDialog"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -106,7 +106,6 @@
                   android:padding="15dp"
                   android:clickable="false"
                   android:focusable="false"
-                  android:onClick="showDatePicker"
                   android:id="@+id/dateInput"
         />
     </LinearLayout>
@@ -128,8 +127,7 @@
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:padding="15dp"
-                android:id="@+id/clearButton"
-                android:onClick="clearButtonAction"/>
+                android:id="@+id/clearButtonBottomDialog"/>
 
 
         <androidx.legacy.widget.Space
@@ -146,8 +144,7 @@
                 android:textFontWeight="600"
                 android:textSize="15sp"
                 android:padding="15dp"
-                android:id="@+id/submitButton"
-                android:onClick="submitButtonAction"/>
+                android:id="@+id/submitButtonBottomDialog"/>
 
     </LinearLayout>
 

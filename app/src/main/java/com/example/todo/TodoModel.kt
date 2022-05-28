@@ -5,12 +5,12 @@ class TodoModel(){
     lateinit var title: String
     lateinit var desc: String
     lateinit var date: String
-    var status: Byte = 0
+    var status: Boolean = false
 
-    val STATUS_PENDING: Byte = 0
-    val STATUS_COMPLETED: Byte = 1
+    val STATUS_PENDING: Boolean = false
+    val STATUS_COMPLETED: Boolean = true
 
-    constructor(id: Long, title: String, desc: String, date: String, status: Byte) : this() {
+    constructor(id: Long, title: String, desc: String, date: String, status: Boolean) : this() {
         this.id = id
         this.title = title
         this.desc = desc

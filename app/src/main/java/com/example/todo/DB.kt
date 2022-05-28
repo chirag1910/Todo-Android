@@ -8,85 +8,86 @@ import java.io.BufferedWriter
 import java.io.File
 
 class DB{
-    private val SP_NAME = "todos.json";
-    private val MACROS_FILE = "todo_macros";
-    private val ID_KEY = "id";
+    private val SP_NAME = "todos.json"
+    private val MACROS_FILE = "todo_macros"
+    private val ID_KEY = "id"
 
     private fun getNextId(context: Context): Long{
-        return context.getSharedPreferences(MACROS_FILE, Context.MODE_PRIVATE).getLong(ID_KEY, 0) + 1;
+        return context.getSharedPreferences(MACROS_FILE, Context.MODE_PRIVATE).getLong(ID_KEY, 0) + 1
     }
 
     private fun incrementId(context: Context){
-        val id: Long = context.getSharedPreferences(MACROS_FILE, Context.MODE_PRIVATE).getLong(ID_KEY, 0);
-        context.getSharedPreferences(MACROS_FILE, Context.MODE_PRIVATE).edit().putLong(ID_KEY, id+1).apply();
+        val id: Long = context.getSharedPreferences(MACROS_FILE, Context.MODE_PRIVATE).getLong(ID_KEY, 0)
+        context.getSharedPreferences(MACROS_FILE, Context.MODE_PRIVATE).edit().putLong(ID_KEY, id+1).apply()
     }
 
     private fun getFileContent(context: Context): String? {
-        val file: File = File(context.filesDir.absolutePath, SP_NAME);
+        val file = File(context.filesDir.absolutePath, SP_NAME)
         if (file.exists()) {
             val reader: BufferedReader = file.bufferedReader()
-            val content: String = reader.readText();
+            val content: String = reader.readText()
             reader.close()
-            return content;
+            return content
         }
-        return null;
+        return null
     }
     private fun saveFileContent(context: Context, content: String) : Boolean {
-        val file: File = File(context.filesDir.absolutePath, SP_NAME);
+        val file = File(context.filesDir.absolutePath, SP_NAME)
         if (!file.exists())
             if (!file.createNewFile())
-                return false;
+                return false
 
         val writer: BufferedWriter = file.bufferedWriter()
-        writer.write(content);
+        writer.write(content)
         writer.close()
-        return true;
+        return true
     }
     fun create(title: String, desc: String?, date: String, context: Context): Long{
         try{
-            val todo: JSONObject = JSONObject();
-            val nextId: Long = getNextId(context);
-            todo.put("id", nextId);
-            todo.put("title", title);
-            todo.put("desc", desc);
-            todo.put("date", date);
+            val todo = JSONObject()
+            val nextId: Long = getNextId(context)
+            todo.put("id", nextId)
+            todo.put("title", title)
+            todo.put("desc", desc)
+            todo.put("date", date)
+            todo.put("status", TodoModel().STATUS_PENDING)
 
-            val data: String? = getFileContent(context);
-            val todos: JSONArray = if (data == null){
-                JSONArray();
+            val todosString: String? = getFileContent(context)
+            val todos: JSONArray = if (todosString == null){
+                JSONArray()
             }else{
-                JSONArray(data);
+                JSONArray(todosString)
             }
 
-            todos.put(todo);
-            incrementId(context);
+            todos.put(todo)
+            incrementId(context)
             return if (saveFileContent(context, todos.toString())){
-                nextId;
+                nextId
             }else{
-                0;
+                0
             }
 
         }catch (error: Error){
-            return 0;
+            return 0
         }
     }
 
     fun getAll(context: Context): JSONArray{
-        val todos: String? = getFileContent(context);
+        val todosString: String? = getFileContent(context)
 
-        return if (todos == null){
-            JSONArray();
+        return if (todosString == null){
+            JSONArray()
         }else{
-            JSONArray(todos);
+            JSONArray(todosString)
         }
     }
 
     fun delete(context: Context, id: Long): Boolean{
-        val todos: String? = getFileContent(context);
-        if (todos == null){
-            return false;
+        val todosString: String? = getFileContent(context)
+        if (todosString == null){
+            return false
         }else{
-            val todos = JSONArray(todos);
+            val todos = JSONArray(todosString)
 
             for(i in 0 until todos.length()){
                 if (todos.getJSONObject(i).getLong("id") == id){
@@ -99,5 +100,49 @@ class DB{
 
             return false
         }
+    }
+
+    fun update(context: Context, id: Long, title: String, desc: String, date: String): Boolean{
+        val todosString: String? = getFileContent(context)
+        if (todosString == null){
+            return false
+        }else{
+            val todos = JSONArray(todosString)
+
+            for(i in 0 until todos.length()){
+                val obj: JSONObject = todos.getJSONObject(i)
+                if (obj.getLong("id") == id){
+                    obj.put("title", title)
+                    obj.put("desc", desc)
+                    obj.put("date", date)
+                    obj.put("status", TodoModel().STATUS_PENDING)
+
+                    if (saveFileContent(context, todos.toString())){
+                        return true
+                    }
+                }
+            }
+
+            return false
+        }
+    }
+
+    fun updateStatus(context: Context, id: Long, status: Boolean): Boolean{
+        val todosString: String? = getFileContent(context)
+        if (todosString != null){
+            val todos = JSONArray(todosString)
+
+            for(i in 0 until todos.length()){
+                val obj: JSONObject = todos.getJSONObject(i)
+                if (obj.getLong("id") == id){
+                    obj.put("status", status)
+                    if (saveFileContent(context, todos.toString())){
+                        return true
+                    }
+                }
+            }
+        }
+
+        return false
     }
 }
