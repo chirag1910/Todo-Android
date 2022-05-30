@@ -1,5 +1,7 @@
 package com.example.todo
 
+// TODO: convert date type string to long
+
 class TodoModel(){
     var id: Long = 0
     lateinit var title: String
@@ -16,5 +18,9 @@ class TodoModel(){
         this.desc = desc
         this.date = date
         this.status = status
+    }
+
+    override fun toString(): String {
+        return date + "" + status.toString() + "\n"
     }
 }

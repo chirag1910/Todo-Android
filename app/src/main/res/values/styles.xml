@@ -9,16 +9,6 @@
     <style name="AppModalStyle"
            parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_bottom_dialog</item>
-    </style>
-
-    <style name="AppInputFieldStyle"
-          parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/bg_round</item>
-    </style>
-
-    <style name="AppButtonStyle"
-           parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/bg_round</item>
-        <item name="buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>
+        <item name="backgroundTint">@color/background_primary</item>
     </style>
 </resources>

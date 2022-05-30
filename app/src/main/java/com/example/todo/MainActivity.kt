@@ -1,28 +1,64 @@
 package com.example.todo
 
+import android.database.DataSetObserver
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var todosListView: ListView
+    private lateinit var appBarLayoutView: AppBarLayout
+    private lateinit var fabShowDialogMini: FloatingActionButton
 
     private val todosList: ArrayList<TodoModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        todosListView = findViewById(R.id.todo_listView)
+        appBarLayoutView = findViewById(R.id.appBarLayout)
+        fabShowDialogMini = findViewById(R.id.fab_show_create_dialog_mini)
         displayTodos()
+
+        appBarLayoutView.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _: AppBarLayout, verticalOffset: Int ->
+            if (verticalOffset < -200) {
+                fabShowDialogMini.visibility = View.GONE
+            }
+            else
+            {
+                fabShowDialogMini.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    private fun sortTodos(someList : ArrayList<TodoModel>){
+        for(k in 0 until someList.size-1){
+            for (l in 0 until someList.size - 1 - k){
+                if (someList[l].status == someList[l+1].status){
+                    if (Date(someList[l].date) > Date(someList[l+1].date)){
+                        someList[l] = someList[l+1].also { someList[l+1] = someList[l] }
+                    }
+                }else{
+                    if (someList[l+1].status == TodoModel().STATUS_PENDING){
+                        someList[l] = someList[l+1].also { someList[l+1] = someList[l] }
+                    }
+                }
+            }
+        }
     }
 
     private fun displayTodos(){
-        todosListView = findViewById(R.id.todo_listView)
         val todos: JSONArray = DB().getAll(this)
 
         for (i in 0 until todos.length()){
@@ -34,11 +70,26 @@ class MainActivity : AppCompatActivity() {
             val status: Boolean = obj.getBoolean("status")
             todosList.add(TodoModel(id, title, desc, date, status))
         }
+        if (todosList.size == 0)
+            findViewById<TextView>(R.id.empty_listview).visibility = View.VISIBLE
+        else
+            findViewById<TextView>(R.id.empty_listview).visibility = View.GONE
+        sortTodos(todosList)
 
-        val emptyListView: View = layoutInflater.inflate(R.layout.empty_listview, null, false)
-        addContentView(emptyListView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        todosListView.emptyView = emptyListView
-        todosListView.adapter = TodoAdapter(this, R.layout.todo_card, todosList)
+
+        val adapter = TodoAdapter(this, R.layout.todo_card, todosList)
+        adapter.registerDataSetObserver(object : DataSetObserver() {
+            override fun onChanged() {
+                super.onChanged()
+                if (todosList.size == 0)
+                    findViewById<TextView>(R.id.empty_listview).visibility = View.VISIBLE
+                else
+                    findViewById<TextView>(R.id.empty_listview).visibility = View.GONE
+
+                sortTodos(todosList)
+            }
+        })
+        todosListView.adapter = adapter
     }
 
     fun fabAddButtonAction(view: View) {

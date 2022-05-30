@@ -1,14 +1,11 @@
 <resources>
-    <string name="app_name">ToDO</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome!"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">To DO</string>
+    <string name="empty_listview">Nothing pending</string>
+    <string name="add_dialog_title_hint">Title</string>
+    <string name="add_dialog_desc_hint">Description</string>
+    <string name="add_dialog_date_hint">Date</string>
+    <string name="add_dialog_clear_button">Clear</string>
+    <string name="add_dialog_submit_button">Add</string>
+    <string name="add_dialog_close_button">Close Dialog</string>
+    <string name="create_todo_fab">Create To Do</string>
 </resources>

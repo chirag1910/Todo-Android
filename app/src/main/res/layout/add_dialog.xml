@@ -2,7 +2,6 @@
 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_height="match_parent"
@@ -10,7 +9,7 @@
 
     <View android:layout_width="30dp"
           android:layout_height="5dp"
-          android:background="#d4d4d4"
+          android:background="@color/background_tertiary"
           android:layout_marginTop="10dp"
           android:layout_gravity="center"/>
 
@@ -23,14 +22,13 @@
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="Create"
                   android:textAlignment="center"
                   app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintTop_toTopOf="parent"
                   app:layout_constraintEnd_toEndOf="parent"
                   app:layout_constraintBottom_toBottomOf="parent"
                   android:fontWeight="700"
-                  android:textColor="@color/black"
+                  android:textColor="@color/text_primary"
                   android:textSize="28sp"
                   android:id="@+id/dialog_heading"/>
 
@@ -40,19 +38,20 @@
                      app:layout_constraintTop_toTopOf="parent"
                      app:layout_constraintBottom_toBottomOf="parent"
                      android:src="@drawable/ic_close"
-                     android:backgroundTint="@color/white"
-                     android:id="@+id/hideButtonBottomDialog"/>
+                     android:tint="@color/text_primary"
+                     android:backgroundTint="@android:color/transparent"
+                     android:id="@+id/hideButtonBottomDialog"
+                     android:contentDescription="@string/add_dialog_close_button"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="#d4d4d4"
+          android:layout_height="2dp"
+          android:background="@color/background_tertiary"
           android:layout_marginHorizontal="10dp"/>
 
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="Lorem ipsum"
               android:padding="13dp"
               android:gravity="center"
               android:layout_margin="10dp"
@@ -60,92 +59,106 @@
               android:visibility="gone"
               android:textSize="20sp"
               android:textFontWeight="600"
-              android:textColor="#FF6666"
+              android:textColor="@color/error_text"
               android:background="@drawable/bg_error_toast"
-              android:backgroundTint="#4dff6666"
+              android:backgroundTint="@color/error_background"
               android:id="@+id/toast_add_dialog"/>
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:paddingHorizontal="10dp"
-                  android:paddingVertical="25dp">
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+                                           android:layout_height="wrap_content"
+                                           android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                          android:paddingHorizontal="10dp"
+                          android:paddingVertical="25dp">
 
-        <EditText android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:hint="Title"
-                  android:singleLine="true"
-                  android:inputType="text"
-                  android:textColorHint="#666"
-                  android:textColor="@color/black"
-                  android:backgroundTint="#e4e4e4"
-                  android:padding="15dp"
-                  android:layout_marginBottom="15dp"
-                  android:id="@+id/titleInput"
-        />
+                <EditText android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="@string/add_dialog_title_hint"
+                          android:singleLine="true"
+                          android:inputType="text"
+                          android:textColorHint="@color/text_tertiary"
+                          android:textColor="@color/text_secondary"
+                          android:background="@drawable/bg_round"
+                          android:backgroundTint="@color/background_tertiary"
+                          android:padding="15dp"
+                          android:layout_marginBottom="15dp"
+                          android:id="@+id/titleInput"
+                />
 
-        <EditText android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:hint="Description"
-                  android:inputType="textMultiLine"
-                  android:textColorHint="#666"
-                  android:textColor="@color/black"
-                  android:backgroundTint="#e4e4e4"
-                  android:padding="15dp"
-                  android:layout_marginBottom="15dp"
-                  android:id="@+id/descInput"
-        />
+                <EditText android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="@string/add_dialog_desc_hint"
+                          android:inputType="textMultiLine"
+                          android:textColorHint="@color/text_tertiary"
+                          android:textColor="@color/text_secondary"
+                          android:background="@drawable/bg_round"
+                          android:backgroundTint="@color/background_tertiary"
+                          android:padding="15dp"
+                          android:layout_marginBottom="15dp"
+                          android:id="@+id/descInput"
+                />
 
-        <EditText android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:hint="Date"
-                  android:inputType="date"
-                  android:textColorHint="#666"
-                  android:textColor="@color/black"
-                  android:backgroundTint="#e4e4e4"
-                  android:padding="15dp"
-                  android:clickable="false"
-                  android:focusable="false"
-                  android:id="@+id/dateInput"
-        />
-    </LinearLayout>
+                <EditText android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="@string/add_dialog_date_hint"
+                          android:inputType="date"
+                          android:textColorHint="@color/text_tertiary"
+                          android:textColor="@color/text_secondary"
+                          android:background="@drawable/bg_round"
+                          android:backgroundTint="@color/background_tertiary"
+                          android:padding="15dp"
+                          android:clickable="false"
+                          android:focusable="false"
+                          android:id="@+id/dateInput"
+                />
+            </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:weightSum="9"
-                  android:padding="10dp">
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:weightSum="9"
+                          android:padding="10dp">
 
-        <Button android:layout_width="wrap_content"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#d4d4d4"
-                android:text="Clear"
-                android:clickable="false"
-                android:focusable="false"
-                android:alpha="0"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:padding="15dp"
-                android:id="@+id/clearButtonBottomDialog"/>
+                <Button android:layout_width="wrap_content"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/button_danger"
+                        style="?android:attr/selectableItemBackground"
+                        android:alpha="0"
+                        android:text="@string/add_dialog_clear_button"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:padding="15dp"
+                        android:id="@+id/clearButtonBottomDialog"/>
 
 
-        <androidx.legacy.widget.Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                <androidx.legacy.widget.Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
 
-        <Button android:layout_width="wrap_content"
-                android:layout_weight="4"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#000"
-                android:text="Add"
-                android:textColor="@color/white"
-                android:textFontWeight="600"
-                android:textSize="15sp"
-                android:padding="15dp"
-                android:id="@+id/submitButtonBottomDialog"/>
+                <Button android:layout_width="wrap_content"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/button_primary"
+                        style="?android:attr/selectableItemBackground"
+                        android:text="@string/add_dialog_submit_button"
+                        android:textColor="@color/white"
+                        android:textFontWeight="600"
+                        android:textSize="15sp"
+                        android:padding="15dp"
+                        android:id="@+id/submitButtonBottomDialog"/>
 
-    </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
