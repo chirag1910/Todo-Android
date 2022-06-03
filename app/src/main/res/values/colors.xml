@@ -2,8 +2,6 @@
 <resources>
      <color name="white">#FFFFFFFF</color>
 
-    <color name="app_bg">#FFFFFFFF</color>
-
     <color name="background_primary">#FFFFFFFF</color>
     <color name="background_secondary">#FFEDF1F4</color>
     <color name="background_tertiary">#0D000000</color>

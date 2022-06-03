@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_primary">@android:color/system_neutral1_900</color>
+    <color name="background_tertiary">#22FFFFFF</color>
+
+    <color name="text_primary">@android:color/system_accent1_50</color>
+    <color name="text_secondary">@android:color/system_accent1_100</color>
+    <color name="text_tertiary">@android:color/system_accent1_200</color>
+
+    <color name="button_primary">@android:color/system_accent1_400</color>
+</resources>
